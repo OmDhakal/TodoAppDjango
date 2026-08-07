@@ -1,0 +1,39 @@
+{% extends 'todo/base.html' %}
+{% block content %}
+     <h1>ALL Tasks</h1>
+     <table class="table" table-stripped>
+         <thead>
+             <tr>
+                 <th>Title</th>
+                 <th>Description</th>
+                 <th>Completed</th>
+                 <th>Created</th>
+                 <th>Actions</th>
+             </tr>
+         </thead>
+         <tbody>
+             {% for task in tasks %}
+             <tr>
+                 <td>{{ task.title }}</td>
+                 <td>{{task.description}}</td>
+                 <td>
+                     <form method="POST" action="{% url 'todo:task_toggle_complete' task.pk %}">
+                         {% csrf_token %}
+                         <button type="submit" class="btn btn-sm {%if task.completed %}btn-success{% else %}btn-outline-primary{% endif %}">
+                             {% if task.completed %}Mark Incomplete{% else %}Mark Complete{% endif %}
+                         </button>
+                     </form>
+                 </td>
+                 <td>{{ task.created_at }}</td>
+                 <td>
+                     <a class="btn btn-sm btn-warning" href="{% url 'todo:task_update' task.pk %}">Edit</a>
+                     <a class="btn btn-sm btn-danger" href="{% url 'todo:task_delete' task.pk %}">Delete</a>
+                 </td>
+                </tr>
+                {% empty %}
+                {% endfor %}
+                        
+         </tbody>
+     </table>
+{% endblock %}
+  
